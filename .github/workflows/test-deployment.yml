@@ -20,7 +20,7 @@ jobs:
 
     - name: Pulls the latest Docker image from Docker Hub
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker pull alessandrosanen/CalcApp:latest"
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker pull alessandrosanen/calcapp:latest"
 
     - name: Stop any running containers on the Test EC2
       run: |
@@ -29,4 +29,4 @@ jobs:
 
     - name: Run the latest container on the Test EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker run -d -p 3000:3000 alessandrosanen/CalcApp:latest"
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker run -d -p 3000:3000 alessandrosanen/calcapp:latest"
