@@ -1,0 +1,32 @@
+name: Test Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v4
+
+    - name: Set up SSH for EC2 access
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
+
+    - name: Pull the latest Docker image from Docker Hub
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker pull alessandrosanen/CalcApp:latest"
+
+    - name: Stop any running containers on the Test EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker ps -q | xargs -r docker stop"
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker ps -aq | xargs -r docker rm"
+
+    - name: Run the latest container on the Test EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker run -d -p 3000:3000 alessandrosanen/CalcApp:latest"
