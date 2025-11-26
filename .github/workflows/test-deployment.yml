@@ -18,7 +18,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_KEY }}
 
-    - name: Pulls the latest Docker image from Docker Hub
+    - name: Pull the latest Docker image from Docker Hub
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.TEST_IP }} "docker pull alessandrosanen/calcapp:latest"
 
